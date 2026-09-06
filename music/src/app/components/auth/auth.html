@@ -1,0 +1,23 @@
+
+
+
+
+@if (mode) {
+    <input type="text" placeholder="Enter Email">
+    <input type="text" placeholder="Enter Password">
+    <input type="text" placeholder="Enter Username">
+    
+    <button (click)="SignUp()">Sign Up</button>
+
+    <button (click)="mode=!mode">SignIN?</button>
+}@else{
+    <input type="text" placeholder="Enter Email">
+    <input type="text" placeholder="Enter Password">
+    
+    <button (click)="Signin()">Sign In</button>
+
+    <button (click)="mode=!mode">SignUp?</button>
+}
+
+
+
