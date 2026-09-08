@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using backend.api.repo;
 using backend.api.services;
 using backend.Database;
+using Microsoft.AspNetCore.Identity;
 
 namespace backend.api.handlers;
 
@@ -17,12 +18,36 @@ public class AuthHandler{
         this.repos=repos;
     }
 
-    public void SignIn(Postgres_Context db,string mail,string pass)
+    public async Task SignIn(Postgres_Context db,string mail,string pass)
     {
-        
+        var user=await this.repos.auth_repo.GetUserByMail(db,mail);
+        if (user!=null)
+        {
+            Console.WriteLine("User dosent exist");
+            return;
+        }
+
+        var hasher = new PasswordHasher<User>();
+
+        var result = hasher.VerifyHashedPassword(
+            user!,
+            user!.user_pass,
+            pass
+        );
+
+        if (result == PasswordVerificationResult.Success)
+        {
+            
+            return;
+        }
+        else
+        {
+            
+            return;
+        }
     }
 
-    public async Task<(bool,Exception?)> SignUp(Postgres_Context db,string mail,string pass,string name)
+    public async Task SignUp(Postgres_Context db,string mail,string pass,string name)
     {
         var (is_saved,err)=await this.repos.auth_repo.InsertUser(name,mail,pass,db);
 
@@ -30,12 +55,11 @@ public class AuthHandler{
         {
             Console.WriteLine($"Server:failed to insert the user: \n{err}");
         
-            return (is_saved,err);
-
+            return;
         }
 
 
 
-        return (is_saved,err);
+        return;
     }
 }
