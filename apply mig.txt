@@ -1,0 +1,16 @@
+dotnet tool install --global dotnet-ef
+
+export PATH="$PATH:/home/ag/.dotnet/tools"
+
+//only if we are liinux andinstalled .net using snap and not apt 
+export DOTNET_ROOT=/snap/dotnet-sdk/256
+
+dotnet add package Microsoft.EntityFrameworkCore.Design --version 8.0.14
+
+dotnet ef migrations add InitialCreate
+
+
+
+
+
+dotnet ef database update

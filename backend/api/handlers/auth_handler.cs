@@ -18,13 +18,30 @@ public class AuthHandler{
         this.repos=repos;
     }
 
-    public async Task SignIn(Postgres_Context db,string mail,string pass)
+    IResult CreateResponse(bool success,int statusCode,string message,object? data = null)
+    {
+        return Results.Json(
+            new
+            {
+                success,
+                message,
+                data
+            },
+            statusCode: statusCode
+        );
+    }
+
+    public async Task<IResult> SignIn(Postgres_Context db,string mail,string pass,JwtService jwt,HttpResponse res)
     {
         var user=await this.repos.auth_repo.GetUserByMail(db,mail);
-        if (user!=null)
+        if (user==null)
         {
-            Console.WriteLine("User dosent exist");
-            return;
+            Console.WriteLine("Server: Failed to SignIn User dosent exist");
+            return  CreateResponse(
+                false,
+                401,
+                "Invalid email or password"
+            );
         }
 
         var hasher = new PasswordHasher<User>();
@@ -35,31 +52,54 @@ public class AuthHandler{
             pass
         );
 
+
         if (result == PasswordVerificationResult.Success)
         {
-            
-            return;
+            var token=jwt.CreateToken(user);
+            res.Cookies.Append(
+                "auth_token",
+                token,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddHours(1)
+                }
+            );
+            return CreateResponse(true,200,"Sign in successful",
+                new
+                {
+                    user_id = user.user_id,
+                    user_name = user.user_name,
+                    user_mail = user.user_mail
+                }
+            );
+        
         }
         else
         {
-            
-            return;
+            Console.WriteLine("Server: Failed SingIn PassWrod dosent match");
+            return CreateResponse(false,401,"Invalid email or password");
         }
     }
 
-    public async Task SignUp(Postgres_Context db,string mail,string pass,string name)
+    public async Task<IResult> SignUp(Postgres_Context db,string mail,string pass,string name)
     {
         var (is_saved,err)=await this.repos.auth_repo.InsertUser(name,mail,pass,db);
 
         if (err!=null)
         {
-            Console.WriteLine($"Server:failed to insert the user: \n{err}");
+            Console.WriteLine($"Server:failed to SignUp the user: \n{err}");
         
-            return;
+            return CreateResponse(false,500,"Failed to create user");
         }
 
 
 
-        return;
+        return CreateResponse(true,201,"User created successfully");
     }
+
+
+
 }

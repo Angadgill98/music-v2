@@ -25,6 +25,8 @@ public class Auth_repo
             user.user_name=name;
             user.user_mail=mail;
             user.user_pass=hashedPassword;
+            user.liked_albums=[];
+            user.liked_songs=[];
 
             db.UsersTable.Add(user);
 
@@ -34,6 +36,7 @@ public class Auth_repo
         }
         catch (System.Exception err)
         {
+            Console.WriteLine($"Server_Exception: Failed to insert the user: \n{err}");
             return (false,err);
         }
         
@@ -46,10 +49,12 @@ public class Auth_repo
             User? user=db.UsersTable.FirstOrDefault(user=>user.user_mail==mail);
             return user;
         }
-        catch (System.Exception)
+        catch (System.Exception err)
         {
-            
-            throw;
+            Console.WriteLine($"Server_Exception: Failed to find user using mail \n {err}");
+            return null;
         }
     }
+
+    
 }

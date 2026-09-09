@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using backend.api;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<Handlers>();
+builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddDbContext<Postgres_Context>(options =>
     options.UseNpgsql(
@@ -58,10 +59,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+var api=new Api(app);
+api.RegisterAuthRoutes();
 
-var auth_router=app.MapGroup("/api/auth");
 
 
-app.Run();
+app.Run ();
 
 
