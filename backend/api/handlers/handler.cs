@@ -8,6 +8,8 @@ using backend.api.services;
 public class Handlers{
     
     public AuthHandler auth;
+    public UserHandler user;
+
     Repo repo;
 
 
@@ -15,6 +17,7 @@ public class Handlers{
     {
         this.auth=new(services,repos);
         this.repo=repos;
+        this.user=new(services,repos);
 
     }
 }

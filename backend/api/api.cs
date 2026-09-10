@@ -28,9 +28,7 @@ public class Api
 {
     WebApplication app;
     Handlers handlers;
-
     Services services;
-
     Repo repos;
 
     public Api(WebApplication app)
@@ -69,6 +67,11 @@ public class Api
             
         });
 
+    }
+
+    public void RegisterUserRoutes()
+    {
+        var router=this.app.MapGroup("/api/");
     }
 
 }
