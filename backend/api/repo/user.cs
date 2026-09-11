@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using backend.Database;
+using Microsoft.EntityFrameworkCore;
 
 public class User_repo
 {
@@ -33,6 +34,37 @@ public class User_repo
         catch (System.Exception err)
         {
             Console.WriteLine($"Server_Exception: Failed to register user as musician, the error is\n{err}");
+            return (false, err);
+        }
+    }
+
+    public async Task<(bool?, Exception?)> RegisterPlaylist(Postgres_Context db, User user, Guid playlist_id)
+    {
+        try
+        {
+            user.playlists.Add(playlist_id);
+            await db.SaveChangesAsync();
+            return (true, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to register playlist in user, the error is\n{err}");
+            return (false, err);
+        }
+    }
+
+    public async Task<(bool?, Exception?)> RemovePlaylist(Postgres_Context db,User user,Guid playlist_id)
+    {
+        try
+        {
+            user.playlists.Remove(playlist_id);
+            await db.SaveChangesAsync();
+
+            return (true, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to remove playlist, the error is\n{err}");
             return (false, err);
         }
     }
@@ -94,6 +126,55 @@ public class User_repo
         {
             Console.WriteLine($"Server_Exception: Failed to remove album like, the error is\n{err}");
             return (false, err);
+        }
+    }
+
+    public async Task<(List<Playlists>?,Exception?)> GetAllPLaylist(Postgres_Context db,HashSet<Guid> playlists)
+    {
+        try
+        {
+            var playlists1=await db.PlaylistsTable
+            .Where(playlist => playlists.Contains(playlist.playlist_id))
+            .ToListAsync();
+            return (playlists1,null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to get playlists1, the error is\n{err}");
+            return (null, err);
+        }
+    }
+
+
+    public async Task<(List<Songs>?,Exception?)> GetAllLikedSongs(Postgres_Context db,HashSet<Guid> songs_id)
+    {
+        try
+        {
+            var songs=await db.SongsTable
+            .Where(song => songs_id.Contains(song.song_id))
+            .ToListAsync();
+            return (songs,null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to get liked songs, the error is\n{err}");
+            return (null, err);
+        }
+    }
+
+    public async Task<(List<Albums>?,Exception?)> GetAllLikedAlbums(Postgres_Context db,HashSet<Guid> albums_id)
+    {
+        try
+        {
+            var albums=await db.AlbumsTable
+            .Where(album => albums_id.Contains(album.album_id))
+            .ToListAsync();
+            return (albums,null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to get liked Albums, the error is\n{err}");
+            return (null, err);
         }
     }
 }

@@ -7,6 +7,8 @@ public class Repo
     public User_repo user_repo=new();
     public Musician_repo musician_repo=new();
     public Songs_repo song_repo=new();
+    public Playlist_repo playlist_repo=new();
+
 
     public Repo()
     {

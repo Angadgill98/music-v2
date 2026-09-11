@@ -16,6 +16,7 @@ public class Postgres_Context : DbContext
     public DbSet<Musicians> MusiciansTable{ get; set; }
 
     public DbSet<Albums> AlbumsTable{ get; set; }
+    public DbSet<Playlists> PlaylistsTable { get; set; }
 }
 
 
@@ -35,12 +36,25 @@ public class User
 
     public HashSet<Guid> liked_albums{ get; set; }=[];
 
+    public HashSet<Guid> playlists {get; set; }=[];
 
     public User()
     {
         
     }
 
+}
+
+public class Playlists
+{
+    [Key]
+    public Guid playlist_id { get; set; }
+
+    public Guid user_id { get; set; }
+
+    public string name { get; set; } = "";
+
+    public HashSet<Guid> songs { get; set; } = [];
 }
 
 
@@ -74,6 +88,8 @@ public class Songs
     public Guid song_id{get;set;}
 
     public string song_name{ get; set;}="";
+
+    public string category{ get; set;}="";
 
     public Guid musician_id{get;set;}
 

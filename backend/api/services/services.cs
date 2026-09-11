@@ -7,5 +7,11 @@ public class Services
 {
     public Services()
     {
-    }    
+    } 
+
+    public void GetDashBoard()
+    {
+        
+    }   
+    
 }

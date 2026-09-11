@@ -28,6 +28,26 @@ public class Songs_repo
         }
     }
 
+    public async Task<(Songs?, Exception?)> GetSongById(Postgres_Context db, Guid song_id)
+    {
+        try
+        {
+            var song = await db.SongsTable.FindAsync(song_id);
+
+            if (song == null)
+            {
+                return (null, null);
+            }
+
+            return (song, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to get song, the error is\n{err}");
+            return (null, err);
+        }
+    }
+
     public async Task<(bool?, Exception?)> AddAdditionalSingers(Postgres_Context db, Songs song, Guid musician_id)
     {
         try

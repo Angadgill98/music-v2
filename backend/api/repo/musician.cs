@@ -2,6 +2,7 @@
 
 using System.Threading.Tasks;
 using backend.Database;
+using Microsoft.EntityFrameworkCore;
 
 public class Musician_repo
 {
@@ -81,6 +82,41 @@ public class Musician_repo
         {
             Console.WriteLine($"Server_Exception: Failed to register album to musician, the error is\n{err}");
             return (false, err);
+        }
+    }
+
+
+    public async Task<(List<Songs>?, Exception?)> GetMusicianSongs(Postgres_Context db, Musicians musician)
+    {
+        try
+        {
+            var songs = await db.SongsTable
+                .Where(song => musician.songs.Contains(song.song_id))
+                .ToListAsync();
+
+            return (songs, null);
+        }
+        catch (System.Exception Err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to get musician songs, the error is\n{Err}");
+            return (null, Err);
+        }
+    }
+
+    public async Task<(List<Albums>?, Exception?)> GetMusicianAlbums(Postgres_Context db, Musicians musician)
+    {
+        try
+        {
+            var albums = await db.AlbumsTable
+                .Where(album => musician.albums.Contains(album.album_id))
+                .ToListAsync();
+
+            return (albums, null);
+        }
+        catch (System.Exception Err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to get musician albums, the error is\n{Err}");
+            return (null, Err);
         }
     }
 }

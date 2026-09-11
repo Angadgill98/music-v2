@@ -46,7 +46,7 @@ public class Api
 
     public void RegisterAuthRoutes()
     {
-        var router=this.app.MapGroup("/api/auth");
+        var router=this.app.MapGroup("/auth");
         router.MapPost("/sign-in",async ([FromBody] SignInReq req,[FromServices] Postgres_Context db,[FromServices] JwtService jwt,HttpResponse res) =>
         {
             var mail=req.mail;
@@ -69,9 +69,106 @@ public class Api
 
     }
 
-    public void RegisterUserRoutes()
+    public void RegisterApiRoutes()
+    {
+
+        
+
+
+
+    }
+
+    public void RegisterUserProfileRoutes()
+    {
+        var router=this.app.MapGroup("/api/profile-user");
+
+        router.MapGet("/get-profile",async (HttpContext context,[FromServices] Postgres_Context db) =>
+        {
+            Guid userId =Guid.Parse(context.User.FindFirst("user_id")!.Value);
+
+            return await this.handlers.user.GetProfileUser(db,userId);
+
+        }).RequireAuthorization();
+
+        router.MapGet("/get-musicain-profile-private",async (HttpContext context,[FromServices] Postgres_Context db) =>
+        {
+            Guid musician_id =Guid.Parse(context.User.FindFirst("user_musician_id")!.Value);
+            
+            return await this.handlers.user.GetProfileMusicianPrivate(db,musician_id);
+
+        }).RequireAuthorization();
+
+        router.MapPost("/create-playlist",async (HttpContext context,[FromServices] Postgres_Context db) =>
+        {
+            Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
+
+            
+        });
+
+        router.MapPost("/delete-playlist",async (HttpContext context,[FromServices] Postgres_Context db) =>
+        {
+            Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
+
+            
+        });
+
+        router.MapPost("/remove-like",async (HttpContext context,[FromServices] Postgres_Context db) =>
+        {
+            Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
+
+            
+        });
+
+    }
+
+    public void RegisterDashBoardRoutes()
     {
         var router=this.app.MapGroup("/api/");
+
+        router.MapGet("/dashboard",async () =>
+        {
+            
+        });
+    }
+
+    public void RegisterSongRoutes()
+    {
+        var router=this.app.MapGroup("/api/song");
+
+        router.MapGet("/get-song",async () =>
+        {
+            
+        });
+
+        router.MapGet("/like-song",async () =>
+        {
+            
+        });
+
+        router.MapGet("/remove-like",async () =>
+        {
+            
+        });
+
+        router.MapGet("/add-to-playlist",async () =>
+        {
+            
+        });
+        
+        router.MapGet("/remove-from-playlist",async () =>
+        {
+            
+        });
+    }
+
+    public void RegisterAlbumRoutes()
+    {
+        
+    }
+
+    public void RegisterMusicianRoutes()
+    {
+        
     }
 
 }

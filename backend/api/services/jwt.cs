@@ -15,7 +15,7 @@ public class JwtService
 
     public string CreateToken(User user)
     {
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim("user_id", user.user_id.ToString()),
             new Claim("user_name", user.user_name),
@@ -24,7 +24,7 @@ public class JwtService
 
         if (user.musician_id != null)
         {
-            claims.Append(
+            claims.Add(
                 new Claim("user_musician_id", user.musician_id.Value.ToString())
             );
         }
