@@ -163,7 +163,27 @@ public class Api
 
     public void RegisterAlbumRoutes()
     {
-        
+        var router=this.app.MapGroup("/api/albums");
+
+        router.MapGet("/get-albums",async () =>
+        {
+            
+        });
+
+        router.MapGet("/get-album",async () =>
+        {
+            
+        });
+
+        router.MapGet("/remove-like-albums",async () =>
+        {
+            
+        });
+
+        router.MapGet("/like-albums",async () =>
+        {
+            
+        });
     }
 
     public void RegisterMusicianRoutes()

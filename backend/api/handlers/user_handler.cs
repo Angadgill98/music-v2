@@ -194,6 +194,298 @@ public class UserHandler
         
 
     }
-     
     
+    public async Task<IResult> AddLike(Postgres_Context db, Guid user_id, Guid song_id)
+    {
+        var (user, userErr) = await this.repos.user_repo.GetUserById(db, user_id);
+
+        if (userErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get user");
+        }
+
+        if (user == null)
+        {
+            return CreateResponse(false, 404, "User not found");
+        }
+
+        var (song, songErr) = await this.repos.song_repo.GetSongById(db, song_id);
+
+        if (songErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get song");
+        }
+
+        if (song == null)
+        {
+            return CreateResponse(false, 404, "Song not found");
+        }
+
+        var (addedToUser, addUserErr) = await this.repos.user_repo.LikeSong(db, song_id, user);
+
+        if (addUserErr != null || addedToUser != true)
+        {
+            return CreateResponse(false, 500, "Failed to add song to liked songs");
+        }
+
+        var (addedLike, addLikeErr) = await this.repos.song_repo.Addlike(db, song);
+
+        if (addLikeErr != null || addedLike != true)
+        {
+            return CreateResponse(false, 500, "Failed to add song like");
+        }
+
+        return CreateResponse(
+            true,
+            200,
+            "Song liked successfully",
+            song_id
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //songs
+
+    // public async Task<IResult> GetSong(Postgres_Context db, Guid song_id)
+    // {
+        
+    // }
+
+    public async Task<IResult> AddToPlaylist(Postgres_Context db, Guid user_id, Guid song_id, Guid playlist_id)
+    {
+        var (user, userErr) = await this.repos.user_repo.GetUserById(db, user_id);
+
+        if (userErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get user");
+        }
+
+        if (user == null)
+        {
+            return CreateResponse(false, 404, "User not found");
+        }
+
+        var (playlist, playlistErr) = await this.repos.playlist_repo.GetPlaylistById(db, playlist_id);
+
+        if (playlistErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get playlist");
+        }
+
+        if (playlist == null)
+        {
+            return CreateResponse(false, 404, "Playlist not found");
+        }
+
+        if (playlist.user_id != user_id)
+        {
+            return CreateResponse(false, 403, "You do not own this playlist");
+        }
+
+        var (added, addErr) = await this.repos.playlist_repo.AddToPlaylist(db, song_id, playlist);
+
+        if (addErr != null || added != true)
+        {
+            return CreateResponse(false, 500, "Failed to add song to playlist");
+        }
+
+        return CreateResponse(
+            true,
+            200,
+            "Song added to playlist successfully",
+            song_id
+        );
+    }
+
+    public async Task<IResult> RemoveFromPlaylist(Postgres_Context db, Guid user_id, Guid song_id, Guid playlist_id)
+    {
+        var (user, userErr) = await this.repos.user_repo.GetUserById(db, user_id);
+
+        if (userErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get user");
+        }
+
+        if (user == null)
+        {
+            return CreateResponse(false, 404, "User not found");
+        }
+
+        var (playlist, playlistErr) = await this.repos.playlist_repo.GetPlaylistById(db, playlist_id);
+
+        if (playlistErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get playlist");
+        }
+
+        if (playlist == null)
+        {
+            return CreateResponse(false, 404, "Playlist not found");
+        }
+
+        if (playlist.user_id != user_id)
+        {
+            return CreateResponse(false, 403, "You do not own this playlist");
+        }
+
+        var (removed, removeErr) = await this.repos.playlist_repo.RemoveFromPlaylist(db, song_id, playlist);
+
+        if (removeErr != null || removed != true)
+        {
+            return CreateResponse(false, 500, "Failed to remove song from playlist");
+        }
+
+        return CreateResponse(
+            true,
+            200,
+            "Song removed from playlist successfully",
+            song_id
+        );
+    }
+
+
+
+    //albums
+    public async Task<IResult> GetAlbum(Postgres_Context db,Guid user_id ,Guid album_id)
+    {
+        
+
+        var (album, albumErr) = await this.repos.album_repo.GetAlbumById(db, album_id);
+
+        if (albumErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get album");
+        }
+
+        if (album == null)
+        {
+            return CreateResponse(false, 404, "Album not found");
+        }
+
+        return CreateResponse(
+            true,
+            200,
+            "Album retrieved successfully",
+            album
+        );
+    }
+
+    public async Task<IResult> RemoveLikeAlbum(Postgres_Context db, Guid user_id, Guid album_id)
+    {
+        var (user, userErr) = await this.repos.user_repo.GetUserById(db, user_id);
+        if (userErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get user");
+        }
+
+        if (user == null)
+        {
+            return CreateResponse(false, 404, "User not found");
+        }
+
+        var (liked, likeErr) = await this.repos.user_repo.LikeAlbum(db, album_id, user);
+        if (likeErr != null || liked != true)
+        {
+            return CreateResponse(false, 500, "Failed to add album to liked albums");
+        }
+
+        var (album, albumErr) = await this.repos.album_repo.GetAlbumById(db, album_id);
+        if (albumErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get album");
+        }
+        if (album == null)
+        {
+            return CreateResponse(false, 404, "Album not found");
+        }
+
+        var (removed, removeErr) = await this.repos.album_repo.RemoveLike(db, album);
+        if (removeErr != null || removed != true)
+        {
+            return CreateResponse(false, 500, "Failed to remove album like");
+        }
+
+
+        return CreateResponse(
+            true,
+            200,
+            "Album like removed successfully",
+            album_id
+        );
+    }
+
+    public async Task<IResult> LikeAlbum(Postgres_Context db, Guid user_id, Guid album_id)
+    {
+
+        var (user, userErr) = await this.repos.user_repo.GetUserById(db, user_id);
+
+        if (userErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get user");
+        }
+
+        if (user == null)
+        {
+            return CreateResponse(false, 404, "User not found");
+        }
+
+        var (liked, likeErr) = await this.repos.user_repo.LikeAlbum(db, album_id, user);
+
+        if (likeErr != null || liked != true)
+        {
+            return CreateResponse(false, 500, "Failed to add album to liked albums");
+        }
+
+        var (album, albumErr) = await this.repos.album_repo.GetAlbumById(db, album_id);
+
+        if (albumErr != null)
+        {
+            return CreateResponse(false, 500, "Failed to get album");
+        }
+
+        if (album == null)
+        {
+            return CreateResponse(false, 404, "Album not found");
+        }
+
+        var (added, addErr) = await this.repos.album_repo.Addlike(db, album);
+
+        if (addErr != null || added != true)
+        {
+            return CreateResponse(false, 500, "Failed to add album like");
+        }
+
+        return CreateResponse(
+            true,
+            200,
+            "Album liked successfully",
+            album_id
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    //musician
 }

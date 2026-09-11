@@ -74,4 +74,36 @@ public class Playlist_repo
             return (false, err);
         }
     }
+
+    public async Task<(bool?, Exception?)> AddToPlaylist(Postgres_Context db, Guid song_id, Playlists playlist)
+    {
+        try
+        {
+            playlist.songs.Add(song_id);
+            await db.SaveChangesAsync();
+
+            return (true, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to add song to playlist, the error is\n{err}");
+            return (false, err);
+        }
+    }
+
+    public async Task<(bool?, Exception?)> RemoveFromPlaylist(Postgres_Context db, Guid song_id, Playlists playlist)
+    {
+        try
+        {
+            playlist.songs.Remove(song_id);
+            await db.SaveChangesAsync();
+
+            return (true, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to remove song from playlist, the error is\n{err}");
+            return (false, err);
+        }
+    }
 }

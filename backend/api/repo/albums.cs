@@ -35,6 +35,26 @@ public class Albums_repo
         }
     }
 
+    public async Task<(Albums?, Exception?)> GetAlbumById(Postgres_Context db, Guid album_id)
+    {
+        try
+        {
+            var album = await db.AlbumsTable.FindAsync(album_id);
+
+            if (album == null)
+            {
+                return (null, null);
+            }
+
+            return (album, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to get album, the error is\n{err}");
+            return (null, err);
+        }
+    }
+
     public async Task<(bool?,Exception?)> AddAlbumSong(Postgres_Context db,Albums album,Guid song_id)
     {
         try
