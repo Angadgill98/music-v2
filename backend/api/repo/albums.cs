@@ -4,6 +4,7 @@
 using System.Data.SqlTypes;
 using System.Threading.Tasks;
 using backend.Database;
+using Microsoft.EntityFrameworkCore;
 
 public class Albums_repo
 {
@@ -13,7 +14,7 @@ public class Albums_repo
     }
 
 
-    public async Task<(Guid?,Exception?)> CreateAlbum(Postgres_Context db,string album_name)
+    public async Task<(Guid?,Exception?)> CreateAlbum(Postgres_Context db,string album_name,Guid musician_id)
     {
         Albums album=new();
         var album_id=Guid.NewGuid();
@@ -21,7 +22,7 @@ public class Albums_repo
         album.album_id=album_id;
         album.likes=0;
         album.songs=[];
-        
+        album.musician_id=musician_id;
         try
         {
             db.AlbumsTable.Add(album);
@@ -51,6 +52,23 @@ public class Albums_repo
         catch (System.Exception err)
         {
             Console.WriteLine($"Server_Exception: Failed to get album, the error is\n{err}");
+            return (null, err);
+        }
+    }
+
+    public async Task<(List<Albums>?, Exception?)> GetAlbumsByAuthor(Postgres_Context db, Guid musician_id)
+    {
+        try
+        {
+            var albums = await db.AlbumsTable
+                .Where(album => album.musician_id == musician_id)
+                .ToListAsync();
+
+            return (albums, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to get albums by author, the error is\n{err}");
             return (null, err);
         }
     }
@@ -100,5 +118,22 @@ public class Albums_repo
             return (false,err);            
         }
 
+    }
+
+    public async Task<(bool?, Exception?)> ChangeVisibilityofAlbum(Postgres_Context db, Albums album, string visibility)
+    {
+        try
+        {
+            album.visibility = visibility;
+
+            await db.SaveChangesAsync();
+
+            return (true, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to change album visibility, the error is\n{err}");
+            return (false, err);
+        }
     }
 }

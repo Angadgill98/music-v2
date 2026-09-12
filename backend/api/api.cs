@@ -188,7 +188,43 @@ public class Api
 
     public void RegisterMusicianRoutes()
     {
-        
+        var router=this.app.MapGroup("/api/musician");
+
+        router.MapGet("/get-albums",async () =>
+        {
+            
+        });
+
+        router.MapGet("/get-songs",async () =>
+        {
+            
+        });
+
+        router.MapGet("/create-album",async () =>
+        {
+            
+        });
+
+        router.MapGet("/upload-song",async () =>
+        {
+            
+        });
+
+        router.MapGet("/change-visibility-song",async () =>
+        {
+            
+        });
+
+        router.MapGet("/change-visibility-album",async () =>
+        {
+            
+        });
+
+        router.MapGet("/add-song-to-album",async () =>
+        {
+            
+        });
     }
+
 
 }

@@ -97,6 +97,8 @@ public class Songs
 
     public int likes{get;set;}=0;
 
+    public string visibility{ get; set;}="";
+
     public Songs() 
     {
         
@@ -115,7 +117,11 @@ public class Albums
 
     public HashSet<Guid> songs {get;set;}=[];
 
+    public Guid musician_id{get;set;}
+
     public int likes{get;set;}=0;
+
+    public string visibility{ get; set;}="";
 
     public Albums()
     {

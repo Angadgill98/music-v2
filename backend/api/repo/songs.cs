@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using backend.Database;
+using Microsoft.EntityFrameworkCore;
 
 public class Songs_repo
 {
@@ -48,6 +49,23 @@ public class Songs_repo
         }
     }
 
+    public async Task<(List<Songs>?, Exception?)> GetSongsByAuthor(Postgres_Context db, Guid musician_id)
+    {
+        try
+        {
+            var songs = await db.SongsTable
+                .Where(song => song.musician_id == musician_id)
+                .ToListAsync();
+
+            return (songs, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to get songs by author, the error is\n{err}");
+            return (null, err);
+        }
+    }
+
     public async Task<(bool?, Exception?)> AddAdditionalSingers(Postgres_Context db, Songs song, Guid musician_id)
     {
         try
@@ -89,6 +107,23 @@ public class Songs_repo
         catch (System.Exception err)
         {
             Console.WriteLine($"Server_Exception: Failed to remove a like from song, the error is\n{err}");
+            return (false, err);
+        }
+    }
+
+    public async Task<(bool?, Exception?)> ChangeVisibilityofSong(Postgres_Context db, Songs song, string visibility)
+    {
+        try
+        {
+            song.visibility = visibility;
+
+            await db.SaveChangesAsync();
+
+            return (true, null);
+        }
+        catch (System.Exception err)
+        {
+            Console.WriteLine($"Server_Exception: Failed to change song visibility, the error is\n{err}");
             return (false, err);
         }
     }
