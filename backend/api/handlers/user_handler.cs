@@ -4,6 +4,7 @@
 
 using backend.api.repo;
 using backend.api.services;
+using backend.api.services.filr_constructor;
 using backend.Database;
 
 public class UserHandler
@@ -524,11 +525,6 @@ public class UserHandler
         return CreateResponse(true, 201, "Album created successfully", album_id);
     }
 
-    public async Task<IResult> UploadSong(Postgres_Context db, Guid musician_id, string song_name)
-    {
-        
-    }
-
     public async Task<IResult> ChangeVisibilitySong(Postgres_Context db, Guid musician_id, Guid song_id, string visibility)
     {
         if (visibility != "public" && visibility != "private")
@@ -625,8 +621,18 @@ public class UserHandler
         return CreateResponse(true, 200, "Song added to album successfully", song_id);
     }
 
+    public async Task<IResult> SaveUploadContex(Postgres_Context db,UploadContext context)
+    {
+        this.services.upload_service.SaveUploadContext(context);
+        return CreateResponse(
+            true,
+            StatusCodes.Status200OK,
+            "Upload context saved successfully"
+        );
+    }
 
-
-
-
+    public async Task HandleChunkContext(ChunkContext chunk)
+    {
+        
+    }
 }

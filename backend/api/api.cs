@@ -205,10 +205,6 @@ public class Api
             
         });
 
-        router.MapGet("/upload-song",async () =>
-        {
-            
-        });
 
         router.MapGet("/change-visibility-song",async () =>
         {
@@ -221,6 +217,21 @@ public class Api
         });
 
         router.MapGet("/add-song-to-album",async () =>
+        {
+            
+        });
+
+        router.MapPost("/start-upload-context", async () =>
+        {
+            
+        });
+
+        router.MapPost("/get-chunk-context",async ()=>
+        {
+            
+        });
+
+        router.MapPost("/complete-upload",async () =>
         {
             
         });

@@ -13,7 +13,7 @@ class Upload{
         this.chunk_size=10485760;
     }
 
-    async InitailizeUploadContext(file:File){
+    async InitailizeUploadContext(file:File,song_name:string){
         let file_name=file.name;
         let file_size=file.size;
         let file_type=file.type;
@@ -24,6 +24,7 @@ class Upload{
         let upload_id = crypto.randomUUID();
 
         let initialize_upload:UploadContext = {
+            song_name,
             upload_id,
             file_name: file_name,
             file_size: file_size,
@@ -90,6 +91,7 @@ class Upload{
 
 interface UploadContext{
     upload_id:string
+    song_name:String
     file_name: string;
     file_size: number;
     file_type: string;
