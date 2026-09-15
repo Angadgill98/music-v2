@@ -2,6 +2,7 @@
 using backend.api.handlers;
 using backend.api.repo;
 using backend.api.services;
+using backend.api.workers;
 using backend.Database;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,7 @@ public class Api
     Handlers handlers;
     Services services;
     Repo repos;
+    Workers workers;
 
     public Api(WebApplication app)
     {
@@ -41,7 +43,7 @@ public class Api
 
         this.handlers=new(this.services,this.repos);
 
-        
+        this.workers=new(this.services);
     }
 
     public void RegisterAuthRoutes()

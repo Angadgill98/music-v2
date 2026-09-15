@@ -7,7 +7,7 @@ namespace backend.api.services;
 public class Services
 {
 
-    public FC upload_service=new();//here
+    public Upload_service upload_service=new();//here
     public Services()
     {
     } 

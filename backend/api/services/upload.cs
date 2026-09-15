@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace backend.api.services.filr_constructor;
 
 
-public class FC
+public class Upload_service
 {
 
     public Dictionary<Guid, UploadContext> upload_context;
 
-    public FC()
+    public Upload_service()
     {
         
     }
@@ -55,7 +55,26 @@ public class FC
         }
     }
 
-    
+    public UploadContext GetUploadContext(Guid upload_id)
+    {
+        var upload_context=this.upload_context[upload_id];
+        return upload_context;
+    }
+
+    public List<int> CheckChunks(UploadContext context)
+    {
+        List<int> missing_chunks = new();
+
+        for (int i = 0; i < context.chunks_ok.Count; i++)
+        {
+            if (!context.chunks_ok[i])
+            {
+                missing_chunks.Add(i);
+            }
+        }
+
+        return missing_chunks;
+    }
 
 }
 

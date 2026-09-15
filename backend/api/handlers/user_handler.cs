@@ -621,7 +621,7 @@ public class UserHandler
         return CreateResponse(true, 200, "Song added to album successfully", song_id);
     }
 
-    public async Task<IResult> SaveUploadContex(Postgres_Context db,UploadContext context)
+    public async Task<IResult> SaveUploadContext(Postgres_Context db,UploadContext context)
     {
         this.services.upload_service.SaveUploadContext(context);
         return CreateResponse(
