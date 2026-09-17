@@ -111,44 +111,54 @@ public class Api
 
         }).RequireAuthorization();
 
-        // router.MapPost("/create-playlist",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
-            
-        //     return await this.handlers.user.CreatePlaylist(db,user_id,playlist_name);
 
-        // });
 
-        // router.MapPost("/delete-playlist",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
 
-        //     return await this.handlers.user.DeletePlaylist(db,user_id,playlist_id);
-        // });
 
-        // router.MapPost("/remove-like",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
 
-        //     return await this.handlers.user.RemoveLike(db,user_id,song_id);
-        // });
 
-        // router.MapPost("/add-like",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
 
-        //     return await this.handlers.user.RemoveLike(db,user_id,song_id);
-        // });
+
+
+
+        router.MapPost("/create-playlist", async (HttpContext context, [FromServices] Postgres_Context db, CreatePlaylistReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.user.CreatePlaylist(db, user_id, req.playlist_name);
+        });
+
+        router.MapPost("/delete-playlist", async (HttpContext context, [FromServices] Postgres_Context db, DeletePlaylistReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.user.DeletePlaylist(db, user_id, req.playlist_id);
+        });
+
+        router.MapPost("/remove-like", async (HttpContext context, [FromServices] Postgres_Context db, SongLikeReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.user.RemoveLike(db, user_id, req.song_id);
+        });
+
+        router.MapPost("/add-like", async (HttpContext context, [FromServices] Postgres_Context db, SongLikeReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.user.AddLike(db, user_id, req.song_id);
+        });
 
     }
 
     public void RegisterDashBoardRoutes()
     {
-        var router=this.app.MapGroup("/api/");
+        var router=this.app.MapGroup("/api/dashboard");
 
-        router.MapGet("/dashboard",async () =>
+        router.MapGet("/get-songs-category",async (HttpContext context,[FromServices] Postgres_Context db,string category,int limit,int offset) =>
         {
-            
+            return await this.handlers.dashboard.GetSongsByCategory(db, category, limit, offset);
+        });
+
+        router.MapGet("/get-songs-musician",async (HttpContext context,[FromServices] Postgres_Context db,string musician_id,int limit,int offset) =>
+        {
+            return await this.handlers.dashboard.GetSongsByMusician(db, Guid.Parse(musician_id), limit, offset);
         });
     }
 
@@ -156,63 +166,63 @@ public class Api
     {
         var router=this.app.MapGroup("/api/song");
 
-        // router.MapGet("/get-song",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     this.handlers.song.GetSong(db,song_id);
-        // });
+        router.MapGet("/get-song", async (HttpContext context, [FromServices] Postgres_Context db, SongReq req) =>
+        {
+            // return await this.handlers.song.GetSong(db, req.song_id);
+        });
 
-        // router.MapGet("/like-song",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
-        //     this.handlers.song.AddLike(db,user_id,song_id);
-        // });
+        router.MapGet("/like-song", async (HttpContext context, [FromServices] Postgres_Context db, SongReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.song.AddLike(db, user_id, req.song_id);
+        });
 
-        // router.MapGet("/remove-like",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
-        //     this.handlers.song.RemoveLike(db,user_id,song_id);
-        // });
+        router.MapGet("/remove-like", async (HttpContext context, [FromServices] Postgres_Context db, SongReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.song.RemoveLike(db, user_id, req.song_id);
+        });
 
-        // router.MapGet("/add-to-playlist",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
-        //     this.handlers.song.AddToPlaylist(db,user_id,playlist_id);
-        // });
-        
-        // router.MapGet("/remove-from-playlist",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
-        //     this.handlers.song.RemoveFromPlaylist(db,user_id,playlist_id);            
-        // });
+        router.MapGet("/add-to-playlist", async (HttpContext context, [FromServices] Postgres_Context db, SongPlaylistReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.song.AddToPlaylist(db, user_id, req.song_id, req.playlist_id);
+        });
+
+        router.MapGet("/remove-from-playlist", async (HttpContext context, [FromServices] Postgres_Context db, SongPlaylistReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.song.RemoveFromPlaylist(db, user_id, req.song_id, req.playlist_id);
+        });
     }
 
     public void RegisterAlbumRoutes()
     {
         var router=this.app.MapGroup("/api/albums");
 
-        router.MapGet("/get-albums",async (HttpContext context,[FromServices] Postgres_Context db)  =>
+        // router.MapGet("/get-albums", async (HttpContext context, [FromServices] Postgres_Context db) =>
+        // {
+        //     Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+        //     return await this.handlers.album.GetAlbums(db, user_id);
+        // });
+
+        router.MapGet("/get-album", async (HttpContext context, [FromServices] Postgres_Context db, AlbumReq req) =>
         {
-            Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.album.GetAlbum(db, user_id, req.album_id);
         });
 
-        // router.MapGet("/get-album",async (HttpContext context,[FromServices] Postgres_Context db)=>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
-        //     this.handlers.album.GetAlbum(db,user_id,album_id);            
-         
-        // });
+        router.MapGet("/remove-like-albums", async (HttpContext context, [FromServices] Postgres_Context db, AlbumReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.album.RemoveLikeAlbum(db, user_id, req.album_id);
+        });
 
-        // router.MapGet("/remove-like-albums",async (HttpContext context,[FromServices] Postgres_Context db)=>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
-        //     this.handlers.album.RemoveLikeAlbum(db,user_id,album_id);            
-        // });
-
-        // router.MapGet("/like-albums",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid user_id =Guid.Parse(context.User.FindFirst("user_id")!.Value);
-        //     this.handlers.album.LikeAlbum(db,user_id,album_id);            
-        // });
+        router.MapGet("/like-albums", async (HttpContext context, [FromServices] Postgres_Context db, AlbumReq req) =>
+        {
+            Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
+            return await this.handlers.album.LikeAlbum(db, user_id, req.album_id);
+        });
     }
 
     public void RegisterMusicianRoutes()
@@ -231,37 +241,48 @@ public class Api
             return await this.handlers.musician.GetAlbums(db,musician_id);            
         });
 
-        router.MapGet("/get-songs",async (HttpContext context,[FromServices] Postgres_Context db) =>
+
+
+
+
+
+        router.MapGet("/get-songs", async (HttpContext context, [FromServices] Postgres_Context db) =>
         {
-            Guid musician_id =Guid.Parse(context.User.FindFirst("musician_id")!.Value);
-            this.handlers.musician.GetSongs(db,musician_id);            
-        }); 
+            Guid musician_id = Guid.Parse(context.User.FindFirst("musician_id")!.Value);
+            return await this.handlers.musician.GetSongs(db, musician_id);
+        });
 
-        // router.MapGet("/create-album",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid musician_id =Guid.Parse(context.User.FindFirst("musician_id")!.Value);
-        //     this.handlers.musician.CreateAlbum(db,musician_id,album_name);            
-        // });
+        router.MapGet("/create-album", async (HttpContext context, [FromServices] Postgres_Context db, AlbumNameReq req) =>
+        {
+            Guid musician_id = Guid.Parse(context.User.FindFirst("musician_id")!.Value);
+            return await this.handlers.musician.CreateAlbum(db, musician_id, req.album_name);
+        });
+
+        router.MapGet("/change-visibility-song", async (HttpContext context, [FromServices] Postgres_Context db, SongVisibilityReq req) =>
+        {
+            Guid musician_id = Guid.Parse(context.User.FindFirst("musician_id")!.Value);
+            return await this.handlers.musician.ChangeVisibilitySong(db, musician_id, req.song_id, req.visibility);
+        });
+
+        router.MapGet("/change-visibility-album", async (HttpContext context, [FromServices] Postgres_Context db, AlbumVisibilityReq req) =>
+        {
+            Guid musician_id = Guid.Parse(context.User.FindFirst("musician_id")!.Value);
+            return await this.handlers.musician.ChangeVisibilityAlbum(db, musician_id, req.album_id, req.visibility);
+        });
+
+        router.MapGet("/add-song-to-album", async (HttpContext context, [FromServices] Postgres_Context db, AddSongToAlbumReq req) =>
+        {
+            Guid musician_id = Guid.Parse(context.User.FindFirst("musician_id")!.Value);
+            return await this.handlers.musician.AddSongToAlbum(db, musician_id, req.album_id, req.song_id);
+        });
 
 
-        // router.MapGet("/change-visibility-song",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid musician_id =Guid.Parse(context.User.FindFirst("musician_id")!.Value);
-        //     this.handlers.musician.ChangeVisibilitySong(db,musician_id,song_id,visibility);            
-        // });
 
-        // router.MapGet("/change-visibility-album",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid musician_id =Guid.Parse(context.User.FindFirst("musician_id")!.Value);
-        //     this.handlers.musician.ChangeVisibilityAlbum(db,musician_id,song_id,visibility);            
-            
-        // });
 
-        // router.MapGet("/add-song-to-album",async (HttpContext context,[FromServices] Postgres_Context db) =>
-        // {
-        //     Guid musician_id =Guid.Parse(context.User.FindFirst("musician_id")!.Value);
-        //     this.handlers.musician.AddSongToAlbum(db,musician_id,album_id,song_id);            
-        // });
+
+
+
+
 
         router.MapPost("/start-upload-context", async (HttpContext context,[FromServices] Postgres_Context db,UploadContextReq up_con) =>
         {
@@ -315,7 +336,6 @@ public class Api
             return Results.Ok();
 
         }).DisableAntiforgery();
-
 
         router.MapPost("/complete-upload",async (HttpContext context,[FromServices] Postgres_Context db,UploadContextReq up_con) =>
         {

@@ -36,3 +36,66 @@ public class CompleteUploadReq
     public int start { get; set; }
     public int end { get; set; }
 }
+
+
+
+
+
+
+
+
+
+
+public class CreatePlaylistReq
+{
+    public string playlist_name { get; set; } = string.Empty;
+}
+
+public class DeletePlaylistReq
+{
+    public Guid playlist_id { get; set; }
+}
+
+public class SongLikeReq
+{
+    public Guid song_id { get; set; }
+}
+
+public class SongReq
+{
+    public Guid song_id { get; set; }
+}
+
+public class SongPlaylistReq
+{
+    public Guid song_id { get; set; }
+    public Guid playlist_id { get; set; }
+}
+
+public class AlbumReq
+{
+    public Guid album_id { get; set; }
+}
+
+public class AlbumNameReq
+{
+    public string album_name { get; set; } = string.Empty;
+}
+
+public class SongVisibilityReq
+{
+    public Guid song_id { get; set; }
+    public string visibility { get; set; } = string.Empty;
+}
+
+public class AlbumVisibilityReq
+{
+    public Guid album_id { get; set; }
+    public string visibility { get; set; } = string.Empty;
+}
+
+public class AddSongToAlbumReq
+{
+    public Guid album_id { get; set; }
+    public Guid song_id { get; set; }
+}

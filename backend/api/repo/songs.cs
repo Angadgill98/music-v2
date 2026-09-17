@@ -128,4 +128,52 @@ public class Songs_repo
             return (false, err);
         }
     }
+
+
+    public async Task<(List<Songs>?, Exception?)> GetSongsByCategory(Postgres_Context db,string category,int limit,int offset = 0)
+    {
+        try
+        {
+            var songs = await db.SongsTable
+                .Where(song => song.category == category)
+                .OrderBy(song => song.song_id)
+                .Skip(offset)
+                .Take(limit)
+                .ToListAsync();
+
+            return (songs, null);
+        }
+        catch (Exception err)
+        {
+            Console.WriteLine(
+                $"Server_Exception: Failed to get songs by category, the error is\n{err}"
+            );
+
+            return (null, err);
+        }
+    }
+
+
+    public async Task<(List<Songs>?, Exception?)> GetSongsByMusician(Postgres_Context db,Guid musician_id,int limit,int offset = 0)
+    {
+        try
+        {
+            var songs = await db.SongsTable
+                .Where(song => song.musician_id == musician_id)
+                .OrderBy(song => song.song_id)
+                .Skip(offset)
+                .Take(limit)
+                .ToListAsync();
+
+            return (songs, null);
+        }
+        catch (Exception err)
+        {
+            Console.WriteLine(
+                $"Server_Exception: Failed to get songs by musician, the error is\n{err}"
+            );
+
+            return (null, err);
+        }
+    }
 }

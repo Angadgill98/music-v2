@@ -207,8 +207,99 @@ public class MusicainHandler
         );
     }
 
-    public async Task HandleChunkContext(ChunkContext chunk)
+    public async Task<IResult> HandleChunkContext(ChunkContext chunk)
     {
-        
+        try
+        {
+            bool valid = await this.services.upload_service.ValidateChunk(
+                Convert.ToHexString(chunk.Hash),
+                chunk.Data
+            );
+
+            if (!valid)
+            {
+                return CreateResponse(
+                    false,
+                    StatusCodes.Status400BadRequest,
+                    "Invalid chunk"
+                );
+            }
+
+            await this.services.upload_service.SaveChunk(
+                chunk.Data,
+                chunk.UploadId,
+                chunk.ChunkId
+            );
+
+            this.services.upload_service.ChunkOk_UpdateUpload_ctx(
+                chunk.UploadId,
+                chunk.ChunkId
+            );
+
+            return CreateResponse(
+                true,
+                StatusCodes.Status200OK,
+                "Chunk saved successfully"
+            );
+        }
+        catch (Exception ex)
+        {
+            return CreateResponse(
+                false,
+                StatusCodes.Status500InternalServerError,
+                ex.Message
+            );
+        }
+    }
+
+    public async Task<IResult> CompleteUpload(UploadContext context)
+    {
+        try
+        {
+            UploadContext? uploadContext =
+                this.services.upload_service.GetUploadContext(
+                    context.upload_id
+                );
+
+            if (uploadContext == null)
+            {
+                return CreateResponse(
+                    false,
+                    StatusCodes.Status404NotFound,
+                    "Upload context not found"
+                );
+            }
+
+            List<int> missingChunks =
+                this.services.upload_service.CheckChunks(uploadContext);
+
+            if (missingChunks.Count > 0)
+            {
+                return CreateResponse(
+                    false,
+                    StatusCodes.Status400BadRequest,
+                    "Upload is incomplete",
+                    missingChunks
+                );
+            }
+
+            this.services.upload_service.ReconstructOriginal(uploadContext);
+
+            this.services.upload_service.DeleteChunks(uploadContext);
+
+            return CreateResponse(
+                true,
+                StatusCodes.Status200OK,
+                "Upload completed successfully"
+            );
+        }
+        catch (Exception ex)
+        {
+            return CreateResponse(
+                false,
+                StatusCodes.Status500InternalServerError,
+                ex.Message
+            );
+        }
     }
 }

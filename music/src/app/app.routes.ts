@@ -9,16 +9,16 @@ export const routes: Routes = [
         path:"auth",
         component:Auth
     },
-    // {
-    //     path:"",
-    //     component:Dashboard,
-    //     canActivate:[authGuard],
-    // },
     {
         path:"",
-        component:Profile,
+        component:Dashboard,
         canActivate:[authGuard],
+    },
+    // {
+    //     path:"/",
+    //     component:Profile,
+    //     canActivate:[authGuard],
 
-    }
+    // }
 
 ];
