@@ -44,9 +44,53 @@ builder.Services
                 Encoding.UTF8.GetBytes(jwtKey)
             )
         };
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                context.Token = context.Request.Cookies["auth_token"];
+
+                Console.WriteLine(
+                    $"JWT cookie exists: {context.Token != null}"
+                );
+
+                return Task.CompletedTask;
+            },
+
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine(
+                    $"JWT authentication failed: {context.Exception.Message}"
+                );
+
+                return Task.CompletedTask;
+            },
+
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("JWT token validated successfully");
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Angular", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+
+
 
 var app = builder.Build();
 
@@ -58,10 +102,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("Angular");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 var api=new Api(app);
 api.RegisterAuthRoutes();
-
+api.RegisterApiRoutes();
 
 
 app.Run ();

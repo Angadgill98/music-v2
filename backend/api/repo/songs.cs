@@ -6,10 +6,11 @@ public class Songs_repo
 {
     public Songs_repo(){}
 
-    public async Task<(Guid?, Exception?)> CreateSong(Postgres_Context db, string song_name, Guid musician_id)
+    public async Task<(Guid?, Exception?)> CreateSong(Postgres_Context db, string file_name,string song_name, Guid musician_id)
     {
         Songs song = new();
         var song_id = Guid.NewGuid();
+        song.file_name=file_name;
         song.song_name = song_name;
         song.song_id = song_id;
         song.musician_id = musician_id;

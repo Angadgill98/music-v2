@@ -1,0 +1,36 @@
+<button (click)="Regisgtee_as_Musician()">reg as a msucian</button>
+
+
+
+
+
+
+
+
+
+
+<div>
+    <h2>Register as Musician</h2>
+
+    <input
+        type="text"
+        placeholder="Song name"
+        [(ngModel)]="song_name"
+    />
+
+    <input
+        type="text"
+        placeholder="Category"
+        [(ngModel)]="category"
+    />
+
+    <input
+        type="file"
+        accept="audio/*"
+        (change)="onSongFileSelected($event)"
+    />
+
+    <button (click)="UploadSong()">
+        upload song
+    </button>
+</div>

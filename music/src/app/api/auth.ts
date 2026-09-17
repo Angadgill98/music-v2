@@ -12,7 +12,8 @@ export class Auth{
     logger:InfoLogger=new InfoLogger(true);
 
     constructor(url:string,){
-        this.url=url;
+        let post_fix="/auth"
+        this.url=url+post_fix;
     }
 
 
@@ -53,5 +54,15 @@ export class Auth{
         });
     }
 
+    IsTokenValid(): Observable<boolean> {
+        const endpoint = this.url + "/is-valid";
+
+        this.logger.log("Endpoint is " + endpoint);
+
+        return this.http.get<boolean>(endpoint, {
+            withCredentials: true
+        });
+
+    }
 
 }

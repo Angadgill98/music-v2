@@ -15,6 +15,8 @@ export class InfoLogger implements Logger<String>{
     }
 
     log(data: String): void {
-        console.log(data);
+        if (this.enabled){
+            console.log(data);
+        }
     }
 }

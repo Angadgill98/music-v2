@@ -1,3 +1,3 @@
 export const dev_environment = {
-    server_addr:""
+    server_addr:"http://localhost:5289"
 };

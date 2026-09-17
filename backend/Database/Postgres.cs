@@ -32,11 +32,11 @@ public class User
 
     public Guid? musician_id { get; set; }
 
-    public HashSet<Guid> liked_songs{ get; set; }=[];
+    public List<Guid> liked_songs{ get; set; }=[];
 
-    public HashSet<Guid> liked_albums{ get; set; }=[];
+    public List<Guid> liked_albums{ get; set; }=[];
 
-    public HashSet<Guid> playlists {get; set; }=[];
+    public List<Guid> playlists {get; set; }=[];
 
     public User()
     {
@@ -54,7 +54,7 @@ public class Playlists
 
     public string name { get; set; } = "";
 
-    public HashSet<Guid> songs { get; set; } = [];
+    public List<Guid> songs { get; set; } = [];
 }
 
 
@@ -67,9 +67,9 @@ public class Musicians
 
     public string musician_name{ get; set;}="";
 
-    public HashSet<Guid> songs {get;set;}=[];
+    public List<Guid> songs {get;set;}=[];
  
-    public HashSet<Guid> albums {get;set;}=[];
+    public List<Guid> albums {get;set;}=[];
 
 
 
@@ -89,11 +89,13 @@ public class Songs
 
     public string song_name{ get; set;}="";
 
+    public string file_name{ get; set;}="";
+
     public string category{ get; set;}="";
 
     public Guid musician_id{get;set;}
 
-    public HashSet<Guid> other_singers {get;set;}=[];
+    public List<Guid> other_singers {get;set;}=[];
 
     public int likes{get;set;}=0;
 
@@ -115,7 +117,7 @@ public class Albums
 
     public string album_name{ get; set;}="";
 
-    public HashSet<Guid> songs {get;set;}=[];
+    public List<Guid> songs {get;set;}=[];
 
     public Guid musician_id{get;set;}
 

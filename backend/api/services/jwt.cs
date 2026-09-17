@@ -25,7 +25,7 @@ public class JwtService
         if (user.musician_id != null)
         {
             claims.Add(
-                new Claim("user_musician_id", user.musician_id.Value.ToString())
+                new Claim("musician_id", user.musician_id.Value.ToString())
             );
         }
 

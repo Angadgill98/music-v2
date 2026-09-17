@@ -1,0 +1,58 @@
+<app-navbar></app-navbar>
+
+<div class="profile-container">
+    <div class="profile-info-con">
+
+        <h2 class="profile-headings">Profile</h2>
+        <div class="profile-info">
+            <img class="profile-image" src="favicon.ico" alt="Profile">
+            <div class="profile-user">
+                <div>Name</div>
+                <div>Mail</div>
+            </div>
+        </div>
+    </div> 
+
+
+    <div class="profile-song-con">
+        <h2 class="profile-headings">Liked Songs</h2>
+        <div>
+
+        </div>
+    </div>
+
+
+    <div class="profile-album-con">
+        <h2 class="profile-headings">Liked Albums</h2>
+        <div>
+    
+        </div>
+    </div>
+
+
+    <div  class="profile-playlist-con">
+        <div>
+            <h2 class="profile-headings">Playlist</h2>
+            <button id="profile-button-playlist">+</button>
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+<button (click)="musician_profile = !musician_profile">
+    Show Musician
+</button>
+
+@if (musician_profile) {
+    <div>
+        <app-musician></app-musician>   
+    </div>
+}

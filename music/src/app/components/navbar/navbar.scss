@@ -1,0 +1,78 @@
+:host{
+    display: block;
+    width: 100vw;
+    height: 5vh;
+}
+
+
+
+@mixin navbar-layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+
+
+
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+@mixin navbar-theme {
+  background: #ffffff;
+  color: #000000;
+  border-bottom: 1px solid #ddd;
+}
+
+.navbar-container {
+  @include navbar-layout;
+  @include navbar-theme;
+}
+
+
+
+
+
+
+
+
+
+@mixin navbar-web-name-layout {
+  margin: 0;
+}
+
+@mixin navbar-web-name-theme {
+  color: #222;
+}
+
+.navbar-web-name {
+  @include navbar-web-name-layout;
+  @include navbar-web-name-theme;
+}
+
+
+
+
+
+
+
+
+@mixin navbar-profile-layout {
+  margin: 0;
+  cursor: pointer;
+}
+
+@mixin navbar-profile-theme {
+  color: #555;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.navbar-profile {
+  @include navbar-profile-layout;
+  @include navbar-profile-theme;
+}

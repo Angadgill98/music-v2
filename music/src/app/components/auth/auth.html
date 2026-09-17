@@ -1,23 +1,34 @@
 
 
+<div class="auth-container">
+
+    @if (mode) {
+
+        <h1 class="auth-mode-heading">Sign Up</h1>
+
+        <div class="auth-inputs-div">
+            <input class="auth-inputs" [(ngModel)]="mail" type="text" placeholder="Enter Email">
+            <input class="auth-inputs" [(ngModel)]="pass" type="text" placeholder="Enter Password">
+            <input class="auth-inputs" [(ngModel)]="name" type="text" placeholder="Enter Username">
+        </div>
+
+        <button  (click)="SignUp()">Sign Up</button>
+
+        <button (click)="mode=!mode">SignIN?</button>
+    }@else{
+
+        <h1 class="auth-mode-heading">Sign In</h1>
+
+        <div class="auth-inputs-div">
+            <input [(ngModel)]="mail" class="auth-inputs" type="text" placeholder="Enter Email">
+            <input [(ngModel)]="pass" class="auth-inputs" type="text" placeholder="Enter Password">
+        </div>
+
+        <button (click)="Signin()">Sign In</button>
+
+        <button (click)="mode=!mode">SignUp?</button>
+    }
 
 
-@if (mode) {
-    <input type="text" placeholder="Enter Email">
-    <input type="text" placeholder="Enter Password">
-    <input type="text" placeholder="Enter Username">
-    
-    <button (click)="SignUp()">Sign Up</button>
 
-    <button (click)="mode=!mode">SignIN?</button>
-}@else{
-    <input type="text" placeholder="Enter Email">
-    <input type="text" placeholder="Enter Password">
-    
-    <button (click)="Signin()">Sign In</button>
-
-    <button (click)="mode=!mode">SignUp?</button>
-}
-
-
-
+</div>

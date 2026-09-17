@@ -1,0 +1,224 @@
+:host{
+    display: block;
+    height: 100%;
+    width: 100%;
+
+
+    background-color: aquamarine;
+
+    box-sizing: border-box;
+}
+
+
+
+@mixin profile-container-layout {
+
+    margin-top: 4.2vh; 
+
+    box-sizing: border-box;
+    height: 90.8vh;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@mixin profile-container-theme {
+    background-color: chocolate
+}
+
+.profile-container {
+  @include profile-container-layout;
+  @include profile-container-theme;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@mixin profile-info-con-layout {
+    box-sizing: border-box;
+
+    padding: 40px;
+}
+
+@mixin profile-info-con-theme {
+    background-color: beige
+
+}
+
+.profile-info-con {
+  @include profile-info-con-layout;
+  @include profile-info-con-theme;
+}
+
+@mixin profile-headings-layout {
+    margin: 0;
+
+    box-sizing: border-box;
+
+}
+
+@mixin profile-headings-theme {
+}
+
+.profile-headings {
+  @include profile-headings-layout;
+  @include profile-headings-theme;
+}
+
+@mixin profile-info-layout {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 10px;
+
+    gap: 50px; 
+
+}
+
+@mixin profile-info-theme {
+    background-color: blue
+
+}
+
+.profile-info {
+  @include profile-info-layout;
+  @include profile-info-theme;
+}
+
+@mixin profile-image-layout {
+    width: 200px;
+    height: 200px;
+}
+
+@mixin profile-image-theme {
+}
+
+.profile-image {
+  @include profile-image-layout;
+  @include profile-image-theme;
+}
+
+
+@mixin profile-user-layout {
+    padding-top: 20px;
+    box-sizing: border-box;
+     
+    display: flex;
+    flex-direction: column;
+    gap: 40px
+}
+
+@mixin profile-user-theme {
+}
+
+.profile-user {
+  @include profile-user-layout;
+  @include profile-user-theme;
+}
+
+
+
+
+
+
+
+
+
+
+
+@mixin profile-song-con-layout {
+
+    background-color: aqua;
+
+    box-sizing: border-box;
+
+    padding: 40px;
+}
+
+@mixin profile-song-con-theme {
+}
+
+.profile-song-con {
+  @include profile-song-con-layout;
+  @include profile-song-con-theme;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@mixin profile-album-con-layout {
+    box-sizing: border-box;
+
+    padding: 40px;
+    background-color: teal;
+}
+
+@mixin profile-album-con-theme {
+}
+
+.profile-album-con {
+  @include profile-album-con-layout;
+  @include profile-album-con-theme;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@mixin profile-playlist-con-layout {
+    box-sizing: border-box;
+
+
+    padding: 40px;
+    background-color: cadetblue
+}
+
+@mixin profile-playlist-con-theme {
+}
+
+.profile-playlist-con {
+  @include profile-playlist-con-layout;
+  @include profile-playlist-con-theme;
+} 
+
+

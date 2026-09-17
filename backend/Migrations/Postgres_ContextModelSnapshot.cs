@@ -36,13 +36,68 @@ namespace backend.Migrations
                     b.Property<int>("likes")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("musician_id")
+                        .HasColumnType("uuid");
+
                     b.Property<List<Guid>>("songs")
                         .IsRequired()
                         .HasColumnType("uuid[]");
 
+                    b.Property<string>("visibility")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("album_id");
 
                     b.ToTable("AlbumsTable");
+                });
+
+            modelBuilder.Entity("backend.Database.Musicians", b =>
+                {
+                    b.Property<Guid>("musician_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<List<Guid>>("albums")
+                        .IsRequired()
+                        .HasColumnType("uuid[]");
+
+                    b.Property<string>("musician_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<List<Guid>>("songs")
+                        .IsRequired()
+                        .HasColumnType("uuid[]");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("musician_id");
+
+                    b.ToTable("MusiciansTable");
+                });
+
+            modelBuilder.Entity("backend.Database.Playlists", b =>
+                {
+                    b.Property<Guid>("playlist_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<List<Guid>>("songs")
+                        .IsRequired()
+                        .HasColumnType("uuid[]");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("playlist_id");
+
+                    b.ToTable("PlaylistsTable");
                 });
 
             modelBuilder.Entity("backend.Database.Songs", b =>
@@ -50,6 +105,14 @@ namespace backend.Migrations
                     b.Property<Guid>("song_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("file_name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("likes")
                         .HasColumnType("integer");
@@ -65,6 +128,10 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("visibility")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("song_id");
 
                     b.ToTable("SongsTable");
@@ -76,8 +143,20 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<List<Guid>>("liked_albums")
+                        .IsRequired()
+                        .HasColumnType("uuid[]");
+
+                    b.Property<List<Guid>>("liked_songs")
+                        .IsRequired()
+                        .HasColumnType("uuid[]");
+
                     b.Property<Guid?>("musician_id")
                         .HasColumnType("uuid");
+
+                    b.Property<List<Guid>>("playlists")
+                        .IsRequired()
+                        .HasColumnType("uuid[]");
 
                     b.Property<string>("user_mail")
                         .IsRequired()

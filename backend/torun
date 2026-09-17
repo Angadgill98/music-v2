@@ -1,0 +1,11 @@
+
+
+dotnet watch run
+
+
+//change port as needed
+http://localhost:5289/swagger/index.html
+
+
+
+//in cors we have angualr port 4200 change ti t as need ed in te program.cs

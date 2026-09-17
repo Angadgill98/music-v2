@@ -129,7 +129,7 @@ public class User_repo
         }
     }
 
-    public async Task<(List<Playlists>?,Exception?)> GetAllPLaylist(Postgres_Context db,HashSet<Guid> playlists)
+    public async Task<(List<Playlists>?,Exception?)> GetAllPLaylist(Postgres_Context db,List<Guid> playlists)
     {
         try
         {
@@ -162,7 +162,7 @@ public class User_repo
         }
     }
 
-    public async Task<(List<Albums>?,Exception?)> GetAllLikedAlbums(Postgres_Context db,HashSet<Guid> albums_id)
+    public async Task<(List<Albums>?,Exception?)> GetAllLikedAlbums(Postgres_Context db,List<Guid> albums_id)
     {
         try
         {
