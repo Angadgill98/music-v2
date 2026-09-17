@@ -1,4 +1,3 @@
-
 using System.Threading.Channels;
 using backend.api.handlers;
 using backend.api.repo;
@@ -84,8 +83,11 @@ public class Api
 
     public void RegisterApiRoutes()
     {
+        this.RegisterUserProfileRoutes();
+        this.RegisterDashBoardRoutes();
+        this.RegisterSongRoutes();
+        this.RegisterAlbumRoutes();
         this.RegisterMusicianRoutes();
-        
 
 
 
@@ -162,34 +164,34 @@ public class Api
         });
     }
 
-    public void RegisterSongRoutes()
+    public void RegisterSongRoutes() 
     {
         var router=this.app.MapGroup("/api/song");
 
-        router.MapGet("/get-song", async (HttpContext context, [FromServices] Postgres_Context db, SongReq req) =>
+        router.MapGet("/get-song", async (HttpContext context, [FromServices] Postgres_Context db,[AsParameters] SongReq req) =>
         {
             // return await this.handlers.song.GetSong(db, req.song_id);
         });
 
-        router.MapGet("/like-song", async (HttpContext context, [FromServices] Postgres_Context db, SongReq req) =>
+        router.MapGet("/like-song", async (HttpContext context, [FromServices] Postgres_Context db,[AsParameters] SongReq req) =>
         {
             Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
             return await this.handlers.song.AddLike(db, user_id, req.song_id);
         });
 
-        router.MapGet("/remove-like", async (HttpContext context, [FromServices] Postgres_Context db, SongReq req) =>
+        router.MapGet("/remove-like", async (HttpContext context, [FromServices] Postgres_Context db,[AsParameters] SongReq req) =>
         {
             Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
             return await this.handlers.song.RemoveLike(db, user_id, req.song_id);
         });
 
-        router.MapGet("/add-to-playlist", async (HttpContext context, [FromServices] Postgres_Context db, SongPlaylistReq req) =>
+        router.MapGet("/add-to-playlist", async (HttpContext context, [FromServices] Postgres_Context db,[AsParameters] SongPlaylistReq req) =>
         {
             Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
             return await this.handlers.song.AddToPlaylist(db, user_id, req.song_id, req.playlist_id);
         });
 
-        router.MapGet("/remove-from-playlist", async (HttpContext context, [FromServices] Postgres_Context db, SongPlaylistReq req) =>
+        router.MapGet("/remove-from-playlist", async (HttpContext context, [FromServices] Postgres_Context db,[AsParameters] SongPlaylistReq req) =>
         {
             Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
             return await this.handlers.song.RemoveFromPlaylist(db, user_id, req.song_id, req.playlist_id);
@@ -206,19 +208,19 @@ public class Api
         //     return await this.handlers.album.GetAlbums(db, user_id);
         // });
 
-        router.MapGet("/get-album", async (HttpContext context, [FromServices] Postgres_Context db, AlbumReq req) =>
+        router.MapGet("/get-album", async (HttpContext context, [FromServices] Postgres_Context db,[AsParameters] AlbumReq req) =>
         {
             Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
             return await this.handlers.album.GetAlbum(db, user_id, req.album_id);
         });
 
-        router.MapGet("/remove-like-albums", async (HttpContext context, [FromServices] Postgres_Context db, AlbumReq req) =>
+        router.MapGet("/remove-like-albums", async (HttpContext context, [FromServices] Postgres_Context db,[AsParameters] AlbumReq req) =>
         {
             Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
             return await this.handlers.album.RemoveLikeAlbum(db, user_id, req.album_id);
         });
 
-        router.MapGet("/like-albums", async (HttpContext context, [FromServices] Postgres_Context db, AlbumReq req) =>
+        router.MapGet("/like-albums", async (HttpContext context, [FromServices] Postgres_Context db,[AsParameters] AlbumReq req) =>
         {
             Guid user_id = Guid.Parse(context.User.FindFirst("user_id")!.Value);
             return await this.handlers.album.LikeAlbum(db, user_id, req.album_id);
@@ -252,25 +254,25 @@ public class Api
             return await this.handlers.musician.GetSongs(db, musician_id);
         });
 
-        router.MapGet("/create-album", async (HttpContext context, [FromServices] Postgres_Context db, AlbumNameReq req) =>
+        router.MapGet("/create-album", async (HttpContext context, [FromServices] Postgres_Context db, [AsParameters] AlbumNameReq req) =>
         {
             Guid musician_id = Guid.Parse(context.User.FindFirst("musician_id")!.Value);
             return await this.handlers.musician.CreateAlbum(db, musician_id, req.album_name);
         });
 
-        router.MapGet("/change-visibility-song", async (HttpContext context, [FromServices] Postgres_Context db, SongVisibilityReq req) =>
+        router.MapGet("/change-visibility-song", async (HttpContext context, [FromServices] Postgres_Context db, [AsParameters] SongVisibilityReq req) =>
         {
             Guid musician_id = Guid.Parse(context.User.FindFirst("musician_id")!.Value);
             return await this.handlers.musician.ChangeVisibilitySong(db, musician_id, req.song_id, req.visibility);
         });
 
-        router.MapGet("/change-visibility-album", async (HttpContext context, [FromServices] Postgres_Context db, AlbumVisibilityReq req) =>
+        router.MapGet("/change-visibility-album", async (HttpContext context, [FromServices] Postgres_Context db, [AsParameters] AlbumVisibilityReq req) =>
         {
             Guid musician_id = Guid.Parse(context.User.FindFirst("musician_id")!.Value);
             return await this.handlers.musician.ChangeVisibilityAlbum(db, musician_id, req.album_id, req.visibility);
         });
 
-        router.MapGet("/add-song-to-album", async (HttpContext context, [FromServices] Postgres_Context db, AddSongToAlbumReq req) =>
+        router.MapGet("/add-song-to-album", async (HttpContext context, [FromServices] Postgres_Context db, [AsParameters] AddSongToAlbumReq req) =>
         {
             Guid musician_id = Guid.Parse(context.User.FindFirst("musician_id")!.Value);
             return await this.handlers.musician.AddSongToAlbum(db, musician_id, req.album_id, req.song_id);
